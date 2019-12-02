@@ -2,17 +2,24 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.misc import imread, imresize
 import tensorflow as tf
+from config import *
 
 
-def sample_images(data_dir, batch_size, high_resolution_shape, low_resolution_shape):
-    # Make a list of all images inside the data directory
-    # all_images = glob.glob(data_dir)
+def sample_images(batch_size, high_resolution_shape, low_resolution_shape):
+    """
 
+    :param data_dir:
+    :param batch_size:
+    :param high_resolution_shape:
+    :param low_resolution_shape:
+    :return:
+    """
     # Choose a random batch of images
     images_batch = np.random.choice(ALL_IMAGES, size=batch_size)
 
     low_resolution_images = []
     high_resolution_images = []
+
     try:
         for img in images_batch:
             # Get an ndarray of the current image
@@ -32,17 +39,19 @@ def sample_images(data_dir, batch_size, high_resolution_shape, low_resolution_sh
             low_resolution_images.append(img1_low_resolution)
     except TypeError as e:
         return sample_images(
-            data_dir, batch_size, high_resolution_shape, low_resolution_shape
+            batch_size, high_resolution_shape, low_resolution_shape
         )
 
-    # Convert the lists to Numpy NDArrays
     return np.array(high_resolution_images), np.array(low_resolution_images)
 
 
 def save_images(low_resolution_image, original_image, generated_image, path):
     """
-    Save low-resolution, high-resolution(original) and
-    generated high-resolution images in a single image
+    Save low-resolution, original and generated super-resolution images in a single image
+    :param low_resolution_image:
+    :param original_image:
+    :param generated_image:
+    :param path:
     """
     fig = plt.figure(figsize=(16, 9))
     ax = fig.add_subplot(1, 3, 1)
@@ -65,7 +74,11 @@ def save_images(low_resolution_image, original_image, generated_image, path):
 
 def write_log(callback, name, value, batch_no):
     """
-    Write scalars to Tensorboard
+    Write losses to Tensorboard
+    :param callback:
+    :param name:
+    :param value:
+    :param batch_no:
     """
     summary = tf.Summary()
     summary_value = summary.value.add()

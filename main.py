@@ -11,10 +11,14 @@ from utils import sample_images, write_log, save_images
 from vgg import build_vgg
 
 
-if mode == "train":
-    # Build and compile VGG19 network to extract features
+def train():
+    # Build VGG network
     vgg = build_vgg()
+
+    # We don't need to train it, make it non-trainable
     vgg.trainable = False
+
+    # Compile VGG19 network to extract features maps
     vgg.compile(loss="mse", optimizer=common_optimizer, metrics=["accuracy"])
 
     # Build and compile the discriminator network
@@ -23,10 +27,6 @@ if mode == "train":
 
     # Build the generator network
     generator = build_generator()
-
-    """
-    Build and compile the adversarial model
-    """
 
     # Input layers for high-resolution and low-resolution images
     input_high_resolution = Input(shape=high_resolution_shape)
@@ -60,19 +60,15 @@ if mode == "train":
     tensorboard.set_model(discriminator)
 
     for epoch in range(epochs):
-        print("Epoch:{}".format(epoch))
+        print("Epoch: {0}".format(epoch))
 
-        """
-        Train the discriminator network
-        """
-
-        # Sample a batch of images
+        # Sample a batch of images for training the discriminator network
         high_resolution_images, low_resolution_images = sample_images(
-            data_dir=data_dir,
             batch_size=batch_size,
             low_resolution_shape=low_resolution_shape,
             high_resolution_shape=high_resolution_shape,
         )
+
         # Normalize images
         high_resolution_images = high_resolution_images / 127.5 - 1.0
         low_resolution_images = low_resolution_images / 127.5 - 1.0
@@ -91,20 +87,16 @@ if mode == "train":
         )
 
         # Calculate total discriminator loss
-        d_loss = 0.5 * np.add(d_loss_real, d_loss_fake)
-        print("d_loss:", d_loss)
+        discriminator_loss = 0.5 * np.add(d_loss_real, d_loss_fake)
+        print("discriminator_loss: ", discriminator_loss)
 
-        """
-        Train the generator network
-        """
-
-        # Sample a batch of images
+        # Sample a batch of images for training the generator network
         high_resolution_images, low_resolution_images = sample_images(
-            data_dir=data_dir,
             batch_size=batch_size,
             low_resolution_shape=low_resolution_shape,
             high_resolution_shape=high_resolution_shape,
         )
+
         # Normalize images
         high_resolution_images = high_resolution_images / 127.5 - 1.0
         low_resolution_images = low_resolution_images / 127.5 - 1.0
@@ -113,25 +105,25 @@ if mode == "train":
         image_features = vgg.predict(high_resolution_images)
 
         # Train the generator network
-        g_loss = adversarial_model.train_on_batch(
+        generator_loss = adversarial_model.train_on_batch(
             [low_resolution_images, high_resolution_images],
             [real_labels, image_features],
         )
 
-        print("g_loss:", g_loss)
+        print("generator_loss: ", generator_loss)
 
         # Write the losses to Tensorboard
-        write_log(tensorboard, "g_loss", g_loss[0], epoch)
-        write_log(tensorboard, "d_loss", d_loss[0], epoch)
+        write_log(tensorboard, "g_loss", generator_loss[0], epoch)
+        write_log(tensorboard, "d_loss", discriminator_loss[0], epoch)
 
         # Sample and save images after every 100 epochs
         if epoch % 100 == 0:
             high_resolution_images, low_resolution_images = sample_images(
-                data_dir=data_dir,
                 batch_size=batch_size,
                 low_resolution_shape=low_resolution_shape,
                 high_resolution_shape=high_resolution_shape,
             )
+
             # Normalize images
             high_resolution_images = high_resolution_images / 127.5 - 1.0
             low_resolution_images = low_resolution_images / 127.5 - 1.0
@@ -150,36 +142,6 @@ if mode == "train":
     generator.save_weights("generator.h5")
     discriminator.save_weights("discriminator.h5")
 
-if mode == "predict":
-    # Build and compile the discriminator network
-    discriminator = build_discriminator()
 
-    # Build the generator network
-    generator = build_generator()
-
-    # Load models
-    generator.load_weights("generator.h5")
-    discriminator.load_weights("discriminator.h5")
-
-    # Get 10 random images
-    high_resolution_images, low_resolution_images = sample_images(
-        data_dir=data_dir,
-        batch_size=10,
-        low_resolution_shape=low_resolution_shape,
-        high_resolution_shape=high_resolution_shape,
-    )
-    # Normalize images
-    high_resolution_images = high_resolution_images / 127.5 - 1.0
-    low_resolution_images = low_resolution_images / 127.5 - 1.0
-
-    # Generate high-resolution images from low-resolution images
-    generated_images = generator.predict_on_batch(low_resolution_images)
-
-    # Save images
-    for index, img in enumerate(generated_images):
-        save_images(
-            low_resolution_images[index],
-            high_resolution_images[index],
-            img,
-            path="predict_results/gen_{}".format(index),
-        )
+if __name__ == "__main__":
+    train()
