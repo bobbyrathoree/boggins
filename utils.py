@@ -5,12 +5,11 @@ import tensorflow as tf
 from config import *
 
 
-def sample_images(batch_size, high_resolution_shape, low_resolution_shape):
+def sample_images(batch_size, higher_resolution_shape, low_resolution_shape):
     """
-
     :param data_dir:
     :param batch_size:
-    :param high_resolution_shape:
+    :param higher_resolution_shape:
     :param low_resolution_shape:
     :return:
     """
@@ -22,25 +21,25 @@ def sample_images(batch_size, high_resolution_shape, low_resolution_shape):
 
     try:
         for img in images_batch:
-            # Get an ndarray of the current image
-            img1 = imread(img, mode="RGB")
-            img1 = img1.astype(np.float32)
+
+            # Read the image in RGB mode
+            sample_image = imread(img, mode="RGB")
+            sample_image = sample_image.astype(np.float32)
 
             # Resize the image
-            img1_high_resolution = imresize(img1, high_resolution_shape)
-            img1_low_resolution = imresize(img1, low_resolution_shape)
+            img1_high_resolution = imresize(sample_image, higher_resolution_shape)
+            img1_low_resolution = imresize(sample_image, low_resolution_shape)
 
-            # Do a random horizontal flip
+            # Do a flip sometimes
             if np.random.random() < 0.5:
                 img1_high_resolution = np.fliplr(img1_high_resolution)
                 img1_low_resolution = np.fliplr(img1_low_resolution)
 
             high_resolution_images.append(img1_high_resolution)
             low_resolution_images.append(img1_low_resolution)
+
     except TypeError as e:
-        return sample_images(
-            batch_size, high_resolution_shape, low_resolution_shape
-        )
+        return sample_images(batch_size, higher_resolution_shape, low_resolution_shape)
 
     return np.array(high_resolution_images), np.array(low_resolution_images)
 

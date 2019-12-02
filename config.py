@@ -15,7 +15,7 @@ TEST_IMAGES_RESULT = test_results_dir
 
 # Shape of low-resolution and high-resolution images
 low_resolution_shape = (64, 64, 3)
-high_resolution_shape = (256, 256, 3)
+higher_resolution_shape = (256, 256, 3)
 
-# Common optimizer for all networks
+# Adam optimizer used for all networks
 common_optimizer = Adam(0.0002, 0.5)

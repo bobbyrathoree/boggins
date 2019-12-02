@@ -43,17 +43,17 @@ def build_generator():
     # Input Layer of the generator network
     input_layer = Input(shape=input_shape)
 
-    # Add the pre-residual block
+    # The pre-residual block
     gen1 = Conv2D(
         filters=64, kernel_size=9, strides=1, padding="same", activation="relu"
     )(input_layer)
 
-    # Add 16 residual blocks
+    # Add 16 skip-connection blocks
     res = residual_block(gen1)
     for i in range(residual_blocks - 1):
         res = residual_block(res)
 
-    # Add the post-residual block
+    # The post-residual block
     gen2 = Conv2D(filters=64, kernel_size=3, strides=1, padding="same")(res)
     gen2 = BatchNormalization(momentum=momentum)(gen2)
 
