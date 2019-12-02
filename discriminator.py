@@ -16,50 +16,50 @@ def build_discriminator():
     input_layer = Input(shape=input_shape)
 
     # Add the first convolution block
-    dis1 = Conv2D(filters=64, kernel_size=3, strides=1, padding="same")(input_layer)
-    dis1 = LeakyReLU(alpha=leakyrelu_alpha)(dis1)
+    discriminator_one = Conv2D(filters=64, kernel_size=3, strides=1, padding="same")(input_layer)
+    discriminator_one = LeakyReLU(alpha=leakyrelu_alpha)(discriminator_one)
 
     # Add the 2nd convolution block
-    dis2 = Conv2D(filters=64, kernel_size=3, strides=2, padding="same")(dis1)
-    dis2 = LeakyReLU(alpha=leakyrelu_alpha)(dis2)
-    dis2 = BatchNormalization(momentum=momentum)(dis2)
+    discriminator_two = Conv2D(filters=64, kernel_size=3, strides=2, padding="same")(discriminator_one)
+    discriminator_two = LeakyReLU(alpha=leakyrelu_alpha)(discriminator_two)
+    discriminator_two = BatchNormalization(momentum=momentum)(discriminator_two)
 
     # Add the third convolution block
-    dis3 = Conv2D(filters=128, kernel_size=3, strides=1, padding="same")(dis2)
-    dis3 = LeakyReLU(alpha=leakyrelu_alpha)(dis3)
-    dis3 = BatchNormalization(momentum=momentum)(dis3)
+    discriminator_three = Conv2D(filters=128, kernel_size=3, strides=1, padding="same")(discriminator_two)
+    discriminator_three = LeakyReLU(alpha=leakyrelu_alpha)(discriminator_three)
+    discriminator_three = BatchNormalization(momentum=momentum)(discriminator_three)
 
     # Add the fourth convolution block
-    dis4 = Conv2D(filters=128, kernel_size=3, strides=2, padding="same")(dis3)
-    dis4 = LeakyReLU(alpha=leakyrelu_alpha)(dis4)
-    dis4 = BatchNormalization(momentum=0.8)(dis4)
+    discriminator_four = Conv2D(filters=128, kernel_size=3, strides=2, padding="same")(discriminator_three)
+    discriminator_four = LeakyReLU(alpha=leakyrelu_alpha)(discriminator_four)
+    discriminator_four = BatchNormalization(momentum=0.8)(discriminator_four)
 
     # Add the fifth convolution block
-    dis5 = Conv2D(256, kernel_size=3, strides=1, padding="same")(dis4)
-    dis5 = LeakyReLU(alpha=leakyrelu_alpha)(dis5)
-    dis5 = BatchNormalization(momentum=momentum)(dis5)
+    discriminator_five = Conv2D(256, kernel_size=3, strides=1, padding="same")(discriminator_four)
+    discriminator_five = LeakyReLU(alpha=leakyrelu_alpha)(discriminator_five)
+    discriminator_five = BatchNormalization(momentum=momentum)(discriminator_five)
 
     # Add the sixth convolution block
-    dis6 = Conv2D(filters=256, kernel_size=3, strides=2, padding="same")(dis5)
-    dis6 = LeakyReLU(alpha=leakyrelu_alpha)(dis6)
-    dis6 = BatchNormalization(momentum=momentum)(dis6)
+    discriminator_six = Conv2D(filters=256, kernel_size=3, strides=2, padding="same")(discriminator_five)
+    discriminator_six = LeakyReLU(alpha=leakyrelu_alpha)(discriminator_six)
+    discriminator_six = BatchNormalization(momentum=momentum)(discriminator_six)
 
     # Add the seventh convolution block
-    dis7 = Conv2D(filters=512, kernel_size=3, strides=1, padding="same")(dis6)
-    dis7 = LeakyReLU(alpha=leakyrelu_alpha)(dis7)
-    dis7 = BatchNormalization(momentum=momentum)(dis7)
+    discriminator_seven = Conv2D(filters=512, kernel_size=3, strides=1, padding="same")(discriminator_six)
+    discriminator_seven = LeakyReLU(alpha=leakyrelu_alpha)(discriminator_seven)
+    discriminator_seven = BatchNormalization(momentum=momentum)(discriminator_seven)
 
     # Add the eight convolution block
-    dis8 = Conv2D(filters=512, kernel_size=3, strides=2, padding="same")(dis7)
-    dis8 = LeakyReLU(alpha=leakyrelu_alpha)(dis8)
-    dis8 = BatchNormalization(momentum=momentum)(dis8)
+    discriminator_eight = Conv2D(filters=512, kernel_size=3, strides=2, padding="same")(discriminator_seven)
+    discriminator_eight = LeakyReLU(alpha=leakyrelu_alpha)(discriminator_eight)
+    discriminator_eight = BatchNormalization(momentum=momentum)(discriminator_eight)
 
     # Add a dense layer
-    dis9 = Dense(units=1024)(dis8)
-    dis9 = LeakyReLU(alpha=0.2)(dis9)
+    discriminator_nine_dense = Dense(units=1024)(discriminator_eight)
+    discriminator_nine_dense = LeakyReLU(alpha=0.2)(discriminator_nine_dense)
 
-    # Last dense layer - for classification
-    output = Dense(units=1, activation="sigmoid")(dis9)
+    # Last dense layer - for classifying how close generated image is to the original
+    output = Dense(units=1, activation="sigmoid")(discriminator_nine_dense)
 
     model = Model(inputs=[input_layer], outputs=[output], name="discriminator")
     return model

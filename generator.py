@@ -4,9 +4,11 @@ from keras.layers.convolutional import Conv2D, UpSampling2D
 from keras.models import Model
 
 
-def residual_block(x):
+def residual_block(layer):
     """
-    Residual block
+    A skip-connection residual block.
+    :param layer: input layer
+    :return:
     """
     filters = [64, 64]
     kernel_size = 3
@@ -15,20 +17,20 @@ def residual_block(x):
     momentum = 0.8
     activation = "relu"
 
-    res = Conv2D(
+    residual = Conv2D(
         filters=filters[0], kernel_size=kernel_size, strides=strides, padding=padding
-    )(x)
-    res = Activation(activation=activation)(res)
-    res = BatchNormalization(momentum=momentum)(res)
+    )(layer)
+    residual = Activation(activation=activation)(residual)
+    residual = BatchNormalization(momentum=momentum)(residual)
 
-    res = Conv2D(
+    residual = Conv2D(
         filters=filters[1], kernel_size=kernel_size, strides=strides, padding=padding
-    )(res)
-    res = BatchNormalization(momentum=momentum)(res)
+    )(residual)
+    residual = BatchNormalization(momentum=momentum)(residual)
 
-    # Add res and x
-    res = Add()([res, x])
-    return res
+    # Add residual and layer
+    residual = Add()([residual, layer])
+    return residual
 
 
 def build_generator():
@@ -74,6 +76,6 @@ def build_generator():
     gen6 = Conv2D(filters=3, kernel_size=9, strides=1, padding="same")(gen5)
     output = Activation("tanh")(gen6)
 
-    # Keras model
+    # Final generator model
     model = Model(inputs=[input_layer], outputs=[output], name="generator")
     return model
