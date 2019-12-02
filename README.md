@@ -1,2 +1,2 @@
 # boggins-image-enhancer
-SR-GAN to generate a high resolution version of a low res image.
+SRGAN to generate a better resolution version of a low-res image.
