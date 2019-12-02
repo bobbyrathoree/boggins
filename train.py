@@ -144,7 +144,7 @@ def train(epochs: int, batch_size: int):
                     low_resolution_images[index],
                     better_resolution_images[index],
                     img,
-                    path="results/img_{}_{}".format(epoch, index),
+                    path="training_results/img_{}_{}".format(epoch, index),
                 )
 
     # When training complete, save the models in the local directory
