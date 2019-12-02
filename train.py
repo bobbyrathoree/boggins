@@ -1,17 +1,22 @@
 import time
+from argparse import ArgumentParser
 
 import numpy as np
 from keras import Input
 from keras.callbacks import TensorBoard
 from keras.models import Model
-from config import *
 from discriminator import build_discriminator
 from generator import build_generator
-from utils import sample_images, write_log, save_images
+from utils import sample_images, write_log, save_images, common_optimizer, higher_resolution_shape, low_resolution_shape
 from vgg import build_vgg
 
 
-def train():
+def train(epochs: int, batch_size: int):
+    """
+    Main method to train boggins
+    :param epochs: number of epochs to train for
+    :param batch_size: batch size
+    """
     # Build VGG network
     vgg = build_vgg()
 
@@ -148,4 +153,9 @@ def train():
 
 
 if __name__ == "__main__":
-    train()
+    parser = ArgumentParser()
+    parser.add_argument("--epochs", "-e", type=int, default=50000, required=False)
+    parser.add_argument("--batch", "-b", type=int, default=32, required=False)
+    args = parser.parse_args()
+
+    train(epochs=args.epochs, batch_size=args.batch)

@@ -1,19 +1,16 @@
 from keras.optimizers import Adam
 import glob
 
-data_dir = "data/img_align_celeba/*.*"
+data_dir = "data/*.*"
 test_dir = "test/*.*"
 test_results_dir = "test_results/"
-epochs = 50000
-batch_size = 5
-mode = "predict"
 
 # Make a list of all images inside the data directory
 ALL_IMAGES = glob.glob(data_dir)
 TEST_IMAGES = glob.glob(test_dir)
 TEST_IMAGES_RESULT = test_results_dir
 
-# Shape of low-resolution and high-resolution images
+# Shape of low-resolution and higher-resolution images
 low_resolution_shape = (64, 64, 3)
 higher_resolution_shape = (256, 256, 3)
 
