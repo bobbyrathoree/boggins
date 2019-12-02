@@ -1,7 +1,7 @@
 from keras.optimizers import Adam
 import glob
 
-data_dir = "/Users/bobbyrathore/Downloads/img_align_celeba/*.*"
+data_dir = "data/img_align_celeba/*.*"
 test_dir = "test/*.*"
 test_results_dir = "test_results/"
 epochs = 50000
