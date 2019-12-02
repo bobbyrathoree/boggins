@@ -13,3 +13,5 @@ Datasets used to train: [CelebA](https://bit.ly/380hp3K) and [imdb-wiki](https:/
 1. Run: `python test.py --input <path-to-your-image-file>`
 
 **Note:** The file is saved in test_results directory.
+
+For training and testing results, visit the [website](https://boggins.firebaseapp.com/)
