@@ -35,7 +35,7 @@ def residual_block(layer):
 
 def build_generator():
     """
-    Create a generator network using the hyperparameter values defined below
+    Create a generator network using the hyper-parameter values defined below
     :return:
     """
     residual_blocks = 16
@@ -46,35 +46,35 @@ def build_generator():
     input_layer = Input(shape=input_shape)
 
     # The pre-residual block
-    gen1 = Conv2D(
+    generator_one = Conv2D(
         filters=64, kernel_size=9, strides=1, padding="same", activation="relu"
     )(input_layer)
 
     # Add 16 skip-connection blocks
-    res = residual_block(gen1)
-    for i in range(residual_blocks - 1):
-        res = residual_block(res)
+    residual = residual_block(generator_one)
+    for _ in range(residual_blocks - 1):
+        residual = residual_block(residual)
 
     # The post-residual block
-    gen2 = Conv2D(filters=64, kernel_size=3, strides=1, padding="same")(res)
-    gen2 = BatchNormalization(momentum=momentum)(gen2)
+    generator_two = Conv2D(filters=64, kernel_size=3, strides=1, padding="same")(residual)
+    generator_two = BatchNormalization(momentum=momentum)(generator_two)
 
     # Take the sum of the output from the pre-residual block(gen1) and the post-residual block(gen2)
-    gen3 = Add()([gen2, gen1])
+    generator_three = Add()([generator_two, generator_one])
 
     # Add an upsampling block
-    gen4 = UpSampling2D(size=2)(gen3)
-    gen4 = Conv2D(filters=256, kernel_size=3, strides=1, padding="same")(gen4)
-    gen4 = Activation("relu")(gen4)
+    generator_four = UpSampling2D(size=2)(generator_three)
+    generator_four = Conv2D(filters=256, kernel_size=3, strides=1, padding="same")(generator_four)
+    generator_four = Activation("relu")(generator_four)
 
     # Add another upsampling block
-    gen5 = UpSampling2D(size=2)(gen4)
-    gen5 = Conv2D(filters=256, kernel_size=3, strides=1, padding="same")(gen5)
-    gen5 = Activation("relu")(gen5)
+    generator_five = UpSampling2D(size=2)(generator_four)
+    generator_five = Conv2D(filters=256, kernel_size=3, strides=1, padding="same")(generator_five)
+    generator_five = Activation("relu")(generator_five)
 
     # Output convolution layer
-    gen6 = Conv2D(filters=3, kernel_size=9, strides=1, padding="same")(gen5)
-    output = Activation("tanh")(gen6)
+    generator_six = Conv2D(filters=3, kernel_size=9, strides=1, padding="same")(generator_five)
+    output = Activation("tanh")(generator_six)
 
     # Final generator model
     model = Model(inputs=[input_layer], outputs=[output], name="generator")

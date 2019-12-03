@@ -13,7 +13,7 @@ def test(file_path: str):
     generator = build_generator()
 
     # Load model weights
-    generator.load_weights("generator.h5")
+    generator.load_weights("models/generator.h5")
 
     # Make a low-res counterpart to predict upon
     image = imread(file_path, mode="RGB")

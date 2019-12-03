@@ -148,8 +148,8 @@ def train(epochs: int, batch_size: int):
                 )
 
     # When training complete, save the models in the local directory
-    generator.save_weights("generator.h5")
-    discriminator.save_weights("discriminator.h5")
+    generator.save_weights("models/generator.h5")
+    discriminator.save_weights("models/discriminator.h5")
 
 
 if __name__ == "__main__":

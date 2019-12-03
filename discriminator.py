@@ -6,7 +6,7 @@ from keras.models import Model
 
 def build_discriminator():
     """
-    Create a discriminator network using the hyperparameter values defined below
+    Create a discriminator network using the hyper-parameter values defined below
     :return:
     """
     leakyrelu_alpha = 0.2
