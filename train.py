@@ -160,6 +160,8 @@ def train(epochs: int, batch_size: int):
 
 
 if __name__ == "__main__":
+
+    # Add option to provide number of epochs and batch size
     parser = ArgumentParser()
     parser.add_argument("--epochs", "-e", type=int, default=50000, required=False)
     parser.add_argument("--batch", "-b", type=int, default=32, required=False)
