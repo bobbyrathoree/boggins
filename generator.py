@@ -56,7 +56,9 @@ def build_generator():
         residual = residual_block(residual)
 
     # The post-residual block
-    generator_two = Conv2D(filters=64, kernel_size=3, strides=1, padding="same")(residual)
+    generator_two = Conv2D(filters=64, kernel_size=3, strides=1, padding="same")(
+        residual
+    )
     generator_two = BatchNormalization(momentum=momentum)(generator_two)
 
     # Take the sum of the output from the pre-residual block(gen1) and the post-residual block(gen2)
@@ -64,16 +66,22 @@ def build_generator():
 
     # Add an upsampling block
     generator_four = UpSampling2D(size=2)(generator_three)
-    generator_four = Conv2D(filters=256, kernel_size=3, strides=1, padding="same")(generator_four)
+    generator_four = Conv2D(filters=256, kernel_size=3, strides=1, padding="same")(
+        generator_four
+    )
     generator_four = Activation("relu")(generator_four)
 
     # Add another upsampling block
     generator_five = UpSampling2D(size=2)(generator_four)
-    generator_five = Conv2D(filters=256, kernel_size=3, strides=1, padding="same")(generator_five)
+    generator_five = Conv2D(filters=256, kernel_size=3, strides=1, padding="same")(
+        generator_five
+    )
     generator_five = Activation("relu")(generator_five)
 
     # Output convolution layer
-    generator_six = Conv2D(filters=3, kernel_size=9, strides=1, padding="same")(generator_five)
+    generator_six = Conv2D(filters=3, kernel_size=9, strides=1, padding="same")(
+        generator_five
+    )
     output = Activation("tanh")(generator_six)
 
     # Final generator model

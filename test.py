@@ -29,22 +29,28 @@ def test(file_path: str):
     # Generate high-resolution images from low-resolution images
     generated_image = generator.predict_on_batch(low_resolution_image)
 
-    # Save image
+    # Make a common figure
     fig = plt.figure(figsize=(16, 9))
+
+    # Add the low resolution image on the left side
     ax = fig.add_subplot(1, 2, 1)
     ax.imshow(low_resolution_image[0], interpolation="nearest")
     ax.axis("off")
     ax.set_title("Low-resolution")
 
+    # Add generated image to figure on the right side
     ax = fig.add_subplot(1, 2, 2)
     ax.imshow(generated_image[0], interpolation="nearest")
     ax.axis("off")
     ax.set_title("Generated")
 
+    # Save the figure
     plt.savefig("{0}{1}".format(TEST_IMAGES_RESULT, file_path.split("/")[-1]))
 
 
 if __name__ == "__main__":
+
+    # Add option to provide input file path
     parser = ArgumentParser()
     parser.add_argument("--input", "-i", type=str, required=True)
     args = parser.parse_args()

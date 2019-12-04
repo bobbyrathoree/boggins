@@ -16,41 +16,57 @@ def build_discriminator():
     input_layer = Input(shape=input_shape)
 
     # Add the first convolution block
-    discriminator_one = Conv2D(filters=64, kernel_size=3, strides=1, padding="same")(input_layer)
+    discriminator_one = Conv2D(filters=64, kernel_size=3, strides=1, padding="same")(
+        input_layer
+    )
     discriminator_one = LeakyReLU(alpha=leakyrelu_alpha)(discriminator_one)
 
     # Add the 2nd convolution block
-    discriminator_two = Conv2D(filters=64, kernel_size=3, strides=2, padding="same")(discriminator_one)
+    discriminator_two = Conv2D(filters=64, kernel_size=3, strides=2, padding="same")(
+        discriminator_one
+    )
     discriminator_two = LeakyReLU(alpha=leakyrelu_alpha)(discriminator_two)
     discriminator_two = BatchNormalization(momentum=momentum)(discriminator_two)
 
     # Add the third convolution block
-    discriminator_three = Conv2D(filters=128, kernel_size=3, strides=1, padding="same")(discriminator_two)
+    discriminator_three = Conv2D(filters=128, kernel_size=3, strides=1, padding="same")(
+        discriminator_two
+    )
     discriminator_three = LeakyReLU(alpha=leakyrelu_alpha)(discriminator_three)
     discriminator_three = BatchNormalization(momentum=momentum)(discriminator_three)
 
     # Add the fourth convolution block
-    discriminator_four = Conv2D(filters=128, kernel_size=3, strides=2, padding="same")(discriminator_three)
+    discriminator_four = Conv2D(filters=128, kernel_size=3, strides=2, padding="same")(
+        discriminator_three
+    )
     discriminator_four = LeakyReLU(alpha=leakyrelu_alpha)(discriminator_four)
     discriminator_four = BatchNormalization(momentum=0.8)(discriminator_four)
 
     # Add the fifth convolution block
-    discriminator_five = Conv2D(256, kernel_size=3, strides=1, padding="same")(discriminator_four)
+    discriminator_five = Conv2D(256, kernel_size=3, strides=1, padding="same")(
+        discriminator_four
+    )
     discriminator_five = LeakyReLU(alpha=leakyrelu_alpha)(discriminator_five)
     discriminator_five = BatchNormalization(momentum=momentum)(discriminator_five)
 
     # Add the sixth convolution block
-    discriminator_six = Conv2D(filters=256, kernel_size=3, strides=2, padding="same")(discriminator_five)
+    discriminator_six = Conv2D(filters=256, kernel_size=3, strides=2, padding="same")(
+        discriminator_five
+    )
     discriminator_six = LeakyReLU(alpha=leakyrelu_alpha)(discriminator_six)
     discriminator_six = BatchNormalization(momentum=momentum)(discriminator_six)
 
     # Add the seventh convolution block
-    discriminator_seven = Conv2D(filters=512, kernel_size=3, strides=1, padding="same")(discriminator_six)
+    discriminator_seven = Conv2D(filters=512, kernel_size=3, strides=1, padding="same")(
+        discriminator_six
+    )
     discriminator_seven = LeakyReLU(alpha=leakyrelu_alpha)(discriminator_seven)
     discriminator_seven = BatchNormalization(momentum=momentum)(discriminator_seven)
 
     # Add the eight convolution block
-    discriminator_eight = Conv2D(filters=512, kernel_size=3, strides=2, padding="same")(discriminator_seven)
+    discriminator_eight = Conv2D(filters=512, kernel_size=3, strides=2, padding="same")(
+        discriminator_seven
+    )
     discriminator_eight = LeakyReLU(alpha=leakyrelu_alpha)(discriminator_eight)
     discriminator_eight = BatchNormalization(momentum=momentum)(discriminator_eight)
 

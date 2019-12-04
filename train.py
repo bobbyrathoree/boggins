@@ -7,7 +7,14 @@ from keras.callbacks import TensorBoard
 from keras.models import Model
 from discriminator import build_discriminator
 from generator import build_generator
-from utils import sample_images, write_log, save_images, common_optimizer, higher_resolution_shape, low_resolution_shape
+from utils import (
+    sample_images,
+    write_log,
+    save_images,
+    common_optimizer,
+    higher_resolution_shape,
+    low_resolution_shape,
+)
 from vgg import build_vgg
 
 
