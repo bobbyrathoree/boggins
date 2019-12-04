@@ -9,6 +9,10 @@ from generator import build_generator
 
 
 def test(file_path: str):
+    """
+    Function to enhance a low resolution image and save it alongside its enhanced version
+    :param file_path: path of input file
+    """
     # Build the generator network
     generator = build_generator()
 
