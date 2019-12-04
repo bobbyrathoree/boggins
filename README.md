@@ -4,6 +4,7 @@ SRGAN to generate a better resolution version of a low-res image.
 Datasets used to train: [CelebA](https://bit.ly/380hp3K) and [imdb-wiki](https://bit.ly/2LaAMxp)
 
 Clone our project using: `git clone https://github.com/bobbyrathoree/boggins.git`
+Create an environment using conda/venv, activate it and run: `pip install -r requirements.txt`
 
 ### Train
 1. Create data directory: `mkdir data`
