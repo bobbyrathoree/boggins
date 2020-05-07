@@ -19,4 +19,4 @@ Create an environment using conda or venv, activate it and run: `pip install -r 
 
 **Note:** The file is saved in test_results directory.
 
-For training and testing results, visit the [website](https://boggins.firebaseapp.com/).
+For training and testing results, visit the [website](http://f8cffc91.ngrok.io).
