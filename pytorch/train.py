@@ -1,5 +1,4 @@
 import os.path
-import argparse
 import torch
 
 from pytorch.data import LRHRDataset
@@ -8,11 +7,7 @@ from pytorch.model import SRGANModel
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-opt", type=str, required=True, help="Path to option JSON file."
-    )
-    opt = parse(parser.parse_args().opt, is_train=True)
+    opt = parse("train.json", is_train=True)
     opt = dict_to_nonedict(opt)
 
     if opt["path"]["resume_state"]:
