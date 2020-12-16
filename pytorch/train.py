@@ -10,20 +10,17 @@ def main():
     opt = parse("train.json", is_train=True)
     opt = dict_to_nonedict(opt)
 
-    if opt["path"]["resume_state"]:
-        resume_state = torch.load(opt["path"]["resume_state"])
-    else:
-        resume_state = None
-        mkdir_and_rename(opt["path"]["experiments_root"])
-        mkdirs(
-            (
-                path
-                for key, path in opt["path"].items()
-                if not key == "experiments_root"
-                and "pretrain_model" not in key
-                and "resume" not in key
-            )
+    resume_state = None
+    mkdir_and_rename(opt["path"]["experiments_root"])
+    mkdirs(
+        (
+            path
+            for key, path in opt["path"].items()
+            if not key == "experiments_root"
+            and "pretrain_model" not in key
+            and "resume" not in key
         )
+    )
 
     setup_logger(None, opt["path"]["log"], "train", level=logging.INFO, screen=True)
     setup_logger("val", opt["path"]["log"], "val", level=logging.INFO)
