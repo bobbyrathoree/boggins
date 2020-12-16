@@ -6,7 +6,7 @@ import torch.nn as nn
 from torch.optim import lr_scheduler
 
 from networks import *
-from models.modules.loss import GANLoss, GradientPenaltyLoss
+from borrowed.loss import GANLoss, GradientPenaltyLoss
 
 logger = logging.getLogger("base")
 
