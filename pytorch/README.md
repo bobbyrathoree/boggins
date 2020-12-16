@@ -1,7 +1,7 @@
 # Boggins+
 
 ### Testing
-To test the model, you'll need to download my pretrained model from here. Copy the downloaded .pth file's location and run this command:
+To test the model, you'll need to download my pretrained model from [here](https://www.dropbox.com/s/bfvqf9qmwa7bmma/bogginsplus.pth?dl=1). Copy the downloaded .pth file's location and run this command:
 
 `python test.py <path-to-pth-file>`
 
