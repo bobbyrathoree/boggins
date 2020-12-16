@@ -1,9 +1,9 @@
 import os.path
 import torch
 
-from pytorch.data import LRHRDataset
-from pytorch.utils import *
-from pytorch.model import SRGANModel
+from data import LRHRDataset
+from utils import *
+from model import SRGANModel
 
 
 def main():
