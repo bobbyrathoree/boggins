@@ -12,7 +12,7 @@ def get_all_image_files(directory):
 
 
 if __name__ == "__main__":
-    os.makedirs("{0}/resize_results".format(sys.argv[1]))
+    os.makedirs("{0}/resize_results".format(sys.argv[1]), exist_ok=True)
     for file in get_all_image_files(sys.argv[1]):
         image_pil = Image.open(file)
         resized_image_pil = image_pil.resize(
