@@ -1,5 +1,5 @@
 {
-    "name": "nESRGANplus_x4_DIV2K",
+    "name": "bogginsplus_x4_DIV2K",
     "use_tb_logger": true,
     "model": "srragan",
     "scale": 4,
@@ -10,8 +10,8 @@
         "train": {
             "name": "DIV2K",
             "mode": "LRHR",
-            "dataroot_HR": "/content/gdrive/My Drive/DIV2K_train_HR_sub",
-            "dataroot_LR": "/content/gdrive/My Drive/DIV2K_train_LR_sub_bicLRx4",
+            "dataroot_HR": "/Users/bobbyrathore/Documents/IU/cv/boggins/pytorch/data/DIV2K_train_HR_sub",
+            "dataroot_LR": "/Users/bobbyrathore/Documents/IU/cv/boggins/pytorch/data/DIV2K_train_LR_sub_bicLRx4",
             "subset_file": null,
             "use_shuffle": true,
             "n_workers": 8,
@@ -23,14 +23,14 @@
         "val": {
             "name": "val_set14_part",
             "mode": "LRHR",
-            "dataroot_HR": "/content/gdrive/My Drive/ESRGAN/Set14",
-            "dataroot_LR": "/content/gdrive/My Drive/ESRGAN/Set14_LR_sub_bicLRx4"
+            "dataroot_HR": "/Users/bobbyrathore/Documents/IU/cv/boggins/pytorch/data/ESRGAN/Set14",
+            "dataroot_LR": "/Users/bobbyrathore/Documents/IU/cv/boggins/pytorch/data/ESRGAN/Set14_LR_sub_bicLRx4"
         }
     },
     "path": {
-        "root": "/content/gdrive/My Drive/ESRGAN/BasicSR",
-        "resume_state": "/content/gdrive/My Drive/ESRGAN/BasicSR/experiments/002_RRDB_ESRGAN_x4_DIV2K/training_state/495000.state",
-        "pretrain_model_G": "/content/gdrive/My Drive/ESRGAN/RRDB_PSNR_x4.pth"
+        "root": "/Users/bobbyrathore/Documents/IU/cv/boggins/pytorch/data/ESRGAN/BasicSR",
+        "resume_state": "/Users/bobbyrathore/Documents/IU/cv/boggins/pytorch/data/ESRGAN/BasicSR/experiments/002_RRDB_ESRGAN_x4_DIV2K/training_state/495000.state",
+        "pretrain_model_G": "/Users/bobbyrathore/Documents/IU/cv/boggins/pytorch/data/ESRGAN/RRDB_PSNR_x4.pth"
     },
     "network_G": {
         "which_model_G": "RRDB_net",
