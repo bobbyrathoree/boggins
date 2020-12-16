@@ -1,6 +1,6 @@
 import math
 import sys
-import os.path
+import os
 import glob
 from collections import OrderedDict
 
@@ -466,7 +466,7 @@ def upconv_blcok(
 
 model_path = sys.argv[1]
 device = torch.device("cuda")
-test_img_folder = "test_image/LR/*"
+test_img_folder = "data/test/LR/*"
 
 model = RRDB_Net(
     3,
@@ -501,4 +501,5 @@ for path in glob.glob(test_img_folder):
     output = model(img_LR).data.squeeze().float().cpu().clamp_(0, 1).numpy()
     output = np.transpose(output[[2, 1, 0], :, :], (1, 2, 0))
     output = (output * 255.0).round()
-    cv2.imwrite("test_image/results/{:s}_rlt.png".format(base), output)
+    os.makedirs("data/test/results/", exist_ok=True)
+    cv2.imwrite("data/test/results/{:s}_sr.png".format(base), output)

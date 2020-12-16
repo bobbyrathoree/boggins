@@ -59,7 +59,6 @@ def get_valid_padding(kernel_size, dilation):
 
 
 class ConcatBlock(nn.Module):
-    # Concat the output of a submodule to its input
     def __init__(self, submodule):
         super(ConcatBlock, self).__init__()
         self.sub = submodule
@@ -76,7 +75,6 @@ class ConcatBlock(nn.Module):
 
 
 class ShortcutBlock(nn.Module):
-    # Elementwise sum the output of a submodule to its input
     def __init__(self, submodule):
         super(ShortcutBlock, self).__init__()
         self.sub = submodule
@@ -165,10 +163,6 @@ def conv_block(
     elif mode == "NAC":
         if norm_type is None and act_type is not None:
             a = act(act_type, inplace=False)
-            # Important!
-            # input----ReLU(inplace)----Conv--+----output
-            #        |________________________|
-            # inplace ReLU will modify the input, therefore wrong output
         n = norm(norm_type, in_nc) if norm_type else None
         return sequential(n, a, p, c)
 
@@ -201,20 +195,16 @@ class minibatch_std_concat_layer(nn.Module):
             vals = torch.mean(vals, dim=1, keepdim=True)
         elif self.averaging == "spatial":
             if len(shape) == 4:
-                vals = mean(
-                    vals, axis=[2, 3], keepdim=True
-                )  # torch.mean(torch.mean(vals, 2, keepdim=True), 3, keepdim=True)
+                vals = mean(vals, axis=[2, 3], keepdim=True)
         elif self.averaging == "none":
             target_shape = [target_shape[0]] + [s for s in target_shape[1:]]
         elif self.averaging == "gpool":
             if len(shape) == 4:
-                vals = mean(
-                    x, [0, 2, 3], keepdim=True
-                )  # torch.mean(torch.mean(torch.mean(x, 2, keepdim=True), 3, keepdim=True), 0, keepdim=True)
+                vals = mean(x, [0, 2, 3], keepdim=True)
         elif self.averaging == "flat":
             target_shape[1] = 1
             vals = torch.FloatTensor([self.adjusted_std(x)])
-        else:  # self.averaging == 'group'
+        else:
             target_shape[1] = self.n
             vals = vals.view(
                 self.n, self.shape[1] / self.n, self.shape[2], self.shape[3]
@@ -222,11 +212,6 @@ class minibatch_std_concat_layer(nn.Module):
             vals = mean(vals, axis=0, keepdim=True).view(1, self.n, 1, 1)
         vals = vals.expand(*target_shape)
         return torch.cat([x, vals], 1)
-
-
-####################
-# Useful blocks
-####################
 
 
 class ResNetBlock(nn.Module):
@@ -268,7 +253,7 @@ class ResNetBlock(nn.Module):
         )
         if mode == "CNA":
             act_type = None
-        if mode == "CNAC":  # Residual path: |-CNAC-|
+        if mode == "CNAC":
             act_type = None
             norm_type = None
         conv1 = conv_block(
@@ -284,12 +269,6 @@ class ResNetBlock(nn.Module):
             act_type,
             mode,
         )
-        # if in_nc != out_nc:
-        #     self.project = conv_block(in_nc, out_nc, 1, stride, dilation, 1, bias, pad_type, \
-        #         None, None)
-        #     print('Need a projecter in ResNetBlock.')
-        # else:
-        #     self.project = lambda x:x
         self.res = sequential(conv0, conv1)
         self.res_scale = res_scale
 
@@ -429,11 +408,6 @@ class RRDB(nn.Module):
         return out.mul(0.2) + x
 
 
-####################
-# Upsampler
-####################
-
-
 def pixelshuffle_block(
     in_nc,
     out_nc,
@@ -495,11 +469,6 @@ def upconv_blcok(
     return sequential(upsample, conv)
 
 
-####################
-# Generator
-####################
-
-
 class SRResNet(nn.Module):
     def __init__(
         self,
@@ -550,12 +519,8 @@ class SRResNet(nn.Module):
             upsampler = [
                 upsample_block(nf, nf, act_type=act_type) for _ in range(n_upscale)
             ]
-        HR_conv0 = conv_block(
-            nf, nf, kernel_size=3, norm_type=None, act_type=act_type
-        )
-        HR_conv1 = conv_block(
-            nf, out_nc, kernel_size=3, norm_type=None, act_type=None
-        )
+        HR_conv0 = conv_block(nf, nf, kernel_size=3, norm_type=None, act_type=act_type)
+        HR_conv1 = conv_block(nf, out_nc, kernel_size=3, norm_type=None, act_type=None)
 
         self.model = sequential(
             fea_conv,
@@ -622,12 +587,8 @@ class RRDBNet(nn.Module):
             upsampler = [
                 upsample_block(nf, nf, act_type=act_type) for _ in range(n_upscale)
             ]
-        HR_conv0 = conv_block(
-            nf, nf, kernel_size=3, norm_type=None, act_type=act_type
-        )
-        HR_conv1 = conv_block(
-            nf, out_nc, kernel_size=3, norm_type=None, act_type=None
-        )
+        HR_conv0 = conv_block(nf, nf, kernel_size=3, norm_type=None, act_type=act_type)
+        HR_conv1 = conv_block(nf, out_nc, kernel_size=3, norm_type=None, act_type=None)
 
         self.model = sequential(
             fea_conv,
@@ -640,11 +601,6 @@ class RRDBNet(nn.Module):
     def forward(self, x):
         x = self.model(x)
         return x
-
-
-####################
-# Discriminator
-####################
 
 
 # VGG style Discriminator with input size 128*128
@@ -1063,11 +1019,6 @@ class Discriminator_VGG_192(nn.Module):
         return x
 
 
-####################
-# Perceptual Network
-####################
-
-
 # Assume input range is [0, 1]
 class VGGFeatureExtractor(nn.Module):
     def __init__(
@@ -1085,15 +1036,12 @@ class VGGFeatureExtractor(nn.Module):
         self.use_input_norm = use_input_norm
         if self.use_input_norm:
             mean = torch.Tensor([0.485, 0.456, 0.406]).view(1, 3, 1, 1).to(device)
-            # [0.485-1, 0.456-1, 0.406-1] if input in range [-1,1]
             std = torch.Tensor([0.229, 0.224, 0.225]).view(1, 3, 1, 1).to(device)
-            # [0.229*2, 0.224*2, 0.225*2] if input in range [-1,1]
             self.register_buffer("mean", mean)
             self.register_buffer("std", std)
         self.features = nn.Sequential(
             *list(model.features.children())[: (feature_layer + 1)]
         )
-        # No need to BP to variable
         for k, v in self.features.named_parameters():
             v.requires_grad = False
 
@@ -1112,13 +1060,10 @@ class ResNet101FeatureExtractor(nn.Module):
         self.use_input_norm = use_input_norm
         if self.use_input_norm:
             mean = torch.Tensor([0.485, 0.456, 0.406]).view(1, 3, 1, 1).to(device)
-            # [0.485-1, 0.456-1, 0.406-1] if input in range [-1,1]
             std = torch.Tensor([0.229, 0.224, 0.225]).view(1, 3, 1, 1).to(device)
-            # [0.229*2, 0.224*2, 0.225*2] if input in range [-1,1]
             self.register_buffer("mean", mean)
             self.register_buffer("std", std)
         self.features = nn.Sequential(*list(model.children())[:8])
-        # No need to BP to variable
         for k, v in self.features.named_parameters():
             v.requires_grad = False
 
