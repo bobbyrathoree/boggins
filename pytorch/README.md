@@ -18,3 +18,6 @@ The script will save the new low-res images in the same directory in a _resize_r
 To train your own model, you'll need to download the datasets using the fetch_dataset.sh script. After download is finished, you'll need to change the dataroot parameters in training configuration file _train.json_ according to where the datasets were now downloaded. Once you have training options file configured, run:
 
 `python train.py`
+
+### Acknowledgement
+- This code is based on [BasicSR](https://github.com/xinntao/BasicSR).
